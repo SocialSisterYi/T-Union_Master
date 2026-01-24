@@ -32,6 +32,7 @@ static void query_progress_view_draw_cb(Canvas* canvas, void* _model) {
 static void query_progress_enter_cb(void* ctx) {
     QureyProgressView* instance = ctx;
 
+    furi_timer_set_thread_priority(FuriTimerThreadPriorityElevated);
     with_view_model(
         instance->view,
         QureyProgressViewModel * model,
@@ -44,11 +45,13 @@ static void query_progress_enter_cb(void* ctx) {
 
 static void query_progress_exit_cb(void* ctx) {
     QureyProgressView* instance = ctx;
+    
     with_view_model(
         instance->view,
         QureyProgressViewModel * model,
         { icon_animation_stop(model->icon); },
         false);
+    furi_timer_set_thread_priority(FuriTimerThreadPriorityNormal);
 }
 
 QureyProgressView* query_progress_alloc() {
